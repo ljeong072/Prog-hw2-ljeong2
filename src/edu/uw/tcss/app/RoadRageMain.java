@@ -17,7 +17,6 @@ import java.awt.EventQueue;
  */
 
 public final class RoadRageMain {
-    
     /**
      * Private constructor to prevent construction of instances.
      */

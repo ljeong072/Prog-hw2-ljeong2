@@ -18,7 +18,6 @@ import java.util.Random;
 
 @SuppressWarnings("PublicMethodNotExposedInInterface")
 public enum Direction {
-
     /**
      * North (which is up on the screen).
      */
