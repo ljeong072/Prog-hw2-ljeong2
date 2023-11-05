@@ -13,7 +13,6 @@ public class Bicycle extends AbstractVehicle{
      * This constant holds the time of death for the bicycle class.
      */
     private static final int DEATH_TIME = 35;
-
     /**
      * The bicycle constructor creates a bicycle object via the abstract vehicle constructor
      * and passes the X and Y position along with the direction.
@@ -22,6 +21,11 @@ public class Bicycle extends AbstractVehicle{
         super(theX, theY, theDir, DEATH_TIME);
     }
 
+    /**
+     *T his method chooses viable directions for the bicycle vehicle. It prioritizes trails and then streets.
+     * @param theNeighbors The map of neighboring terrain.
+     * @return a viable direction for the bicycle to traverse.
+     */
     @Override
     public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
         Direction findirection;
@@ -40,6 +44,11 @@ public class Bicycle extends AbstractVehicle{
         return findirection;
     }
 
+    /**
+     * This helper method checks if the bicycle can move through the streets.
+     * @param theNeighbors is a map which contains the surrounding terrain.
+     * @return a viable direction for the bicycle to traverse.
+     */
     private Direction secondaryBicycleMoveSet(final Map<Direction, Terrain> theNeighbors) {
         Direction possiblemove;
 
@@ -57,17 +66,36 @@ public class Bicycle extends AbstractVehicle{
         }
         return possiblemove;
     }
-
+    /**
+     * This method is called and checks if the Bicycle can pass the terrain.
+     * @param theTerrain is the terrain that the vehicle wants to pass.
+     * @param theLight The light color.
+     * @return a boolean true if it can pass or false if it cannot.
+     */
     @Override
     public boolean canPass(final Terrain theTerrain, final Light theLight) {
-        boolean stoplight = theTerrain != Terrain.CROSSWALK || theLight != Light.GREEN;
+        boolean stoplight = false;
 
-        if (theTerrain == Terrain.LIGHT && theLight == Light.GREEN)
+        if (theTerrain == Terrain.LIGHT && theLight == Light.YELLOW)
         {
-            stoplight = false;
+            stoplight = true;
+        }
+        if (theTerrain == Terrain.LIGHT && theLight == Light.RED)
+        {
+            stoplight = true;
+        }
+        if (theTerrain != Terrain.GRASS && theTerrain != Terrain.WALL)
+        {
+            stoplight = true;
         }
         return stoplight;
     }
+
+    /**
+     * Helper method which chooses the most adjacent trail path (if it is not straight ahead to the bicycle).
+     * @param theNeighbors is a map which contains the surrounding terrain.
+     * @return a String representing the path that the trail is located
+     */
     private String isPath(final Map<Direction, Terrain> theNeighbors) {
         String path = "";
 

@@ -14,7 +14,7 @@ package edu.uw.tcss.model;
  * holding the name of the type of of vehicle.
  *
  * @author Lucas Jeong
- * @version 2023 January 30
+ * @version 2023 November 5
  */
 public abstract class AbstractVehicle implements Vehicle {
     /**

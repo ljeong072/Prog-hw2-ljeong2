@@ -14,7 +14,6 @@ public class Atv extends AbstractVehicle{
      * constant which stores the death time.
      */
     private static final int DEATH_TIME = 25;
-
     /**
      * constructor which passes the x and y position with the direction to the AbstractVehicle
      * constructor while also setting the death time and status.
@@ -22,6 +21,28 @@ public class Atv extends AbstractVehicle{
     public Atv(final int theX, final int theY, final Direction theDir)
     {
         super(theX, theY, theDir, DEATH_TIME);
+    }
+
+    /**
+     * randomMoveSet is the possible directions that could be chosen by the ATV which
+     * it randomly chooses stright, right, and left depending on it's terrain.
+     * @param theNeighbors The map of neighboring terrain.
+     * @return a valid direction for the ATV to travel in.
+     */
+    @Override
+    public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
+        return randomMoveSet(theNeighbors);
+    }
+
+    /**
+     * This method is called and checks if the Atv can pass the terrain.
+     * @param theTerrain The terrain the vehicle wants to pass.
+     * @param theLight The light color.
+     * @return a boolean true if it can pass or false if it cannot.
+     */
+    @Override
+    public boolean canPass(final Terrain theTerrain, final Light theLight){
+        return theTerrain != Terrain.WALL;
     }
 
     /**
@@ -45,27 +66,5 @@ public class Atv extends AbstractVehicle{
         Collections.shuffle(possiblemoves);
 
         return possiblemoves.remove(0);
-    }
-
-    /**
-     * randomMoveSet is the possible directions that could be chosen by the ATV which
-     * it randomly chooses stright, right, and left depending on it's terrain.
-     * @param theNeighbors The map of neighboring terrain.
-     * @return a valid direction for the ATV to travel in.
-     */
-    @Override
-    public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
-        return randomMoveSet(theNeighbors);
-    }
-
-    /**
-     *
-     * @param theTerrain The terrain.
-     * @param theLight The light color.
-     * @return a boolean true if it can pass or false if it cannot.
-     */
-    @Override
-    public boolean canPass(final Terrain theTerrain, final Light theLight){
-        return theTerrain != Terrain.WALL;
     }
 }
