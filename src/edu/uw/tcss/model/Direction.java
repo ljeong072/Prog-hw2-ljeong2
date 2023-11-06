@@ -223,6 +223,7 @@ public enum Direction {
 
         return result;
     }
+
 }
 
 // end of class Direction

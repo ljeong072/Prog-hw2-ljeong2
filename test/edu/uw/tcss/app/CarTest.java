@@ -562,4 +562,16 @@ public class CarTest {
         assertTrue(seenWest && seenNorth && seenEast && seenSouth,
                 "Atv upon revival failed to randomly select a direction.");
     }
+
+    /**
+     * tests if the toString returns the toString for car properly
+     */
+    @Test
+    public void testCarToString(){
+        setUp();
+        String teststring = TEST_CAR.toString();
+
+        assertEquals(teststring, TEST_CAR.toString(), "This string should return the class " +
+                "followed by position, direction, and status.");
+    }
 }

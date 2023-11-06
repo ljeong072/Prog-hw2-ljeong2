@@ -22,7 +22,7 @@ public class Bicycle extends AbstractVehicle{
      * @param theDir is the current direction of the Bicycle.
      */
     public Bicycle(final int theX, final int theY, final Direction theDir) {
-        super(theX, theY, theDir, DEATH_TIME);
+        super(theX, theY, theDir);
     }
 
     /**
@@ -32,7 +32,7 @@ public class Bicycle extends AbstractVehicle{
      */
     @Override
     public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
-        Direction findirection;
+        final Direction findirection;
         final String path = isPath(theNeighbors);
 
         if (!path.isEmpty()) {
@@ -54,7 +54,7 @@ public class Bicycle extends AbstractVehicle{
      * @return a viable direction for the bicycle to traverse.
      */
     private Direction secondaryBicycleMoveSet(final Map<Direction, Terrain> theNeighbors) {
-        Direction possiblemove;
+        final Direction possiblemove;
 
         if (isViableOption(theNeighbors, getDirection())){
             possiblemove = getDirection();
@@ -81,6 +81,8 @@ public class Bicycle extends AbstractVehicle{
         {
             stoplight = true;
         } else if (theTerrain == Terrain.LIGHT && theLight == Light.GREEN) {
+            stoplight = true;
+        } else if (theTerrain == Terrain.CROSSWALK) {
             stoplight = true;
         }
         return stoplight;
@@ -116,5 +118,14 @@ public class Bicycle extends AbstractVehicle{
         return (theNeighbors.get(theDirection) == Terrain.STREET) ||
                 (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
                 (theNeighbors.get(theDirection) == Terrain.LIGHT);
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return DEATH_TIME;
     }
 }

@@ -23,14 +23,14 @@ public class Taxi extends AbstractVehicle{
     private int myCycle = 0;
 
     /**
-     * This Taxi constructor creates a vehicle which passes the X, Y positions and the current direction along with
-     * the death time constant.
+     * This Taxi constructor creates a vehicle which passes the X, Y positions and the current direction.
+     *
      * @param theX is the current position of the taxi.
      * @param theY is the current position of the taxi.
      * @param theDir is the current position of the taxi.
      */
     public Taxi(final int theX, final int theY, final Direction theDir) {
-        super(theX, theY, theDir, DEATH_TIME);
+        super(theX, theY, theDir);
     }
 
     /**
@@ -41,7 +41,7 @@ public class Taxi extends AbstractVehicle{
      */
     @Override
     public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
-        Direction findirection;
+        final Direction findirection;
 
         if (isViableOption(theNeighbors, getDirection()))
         {
@@ -114,5 +114,14 @@ public class Taxi extends AbstractVehicle{
             stoplight = true;
         }
         return stoplight;
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return DEATH_TIME;
     }
 }

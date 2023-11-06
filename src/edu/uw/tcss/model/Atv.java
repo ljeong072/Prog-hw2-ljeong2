@@ -16,14 +16,15 @@ public class Atv extends AbstractVehicle{
     private static final int DEATH_TIME = 25;
     /**
      * constructor which passes the x and y position with the direction to the AbstractVehicle
-     * constructor while also setting the death time and status.
+     * class.
+     *
      * @param theX is the current x position of the Atv.
      * @param theY is the current y position of the Atv.
      * @param theDir is the current direction of the Atv.
      */
     public Atv(final int theX, final int theY, final Direction theDir)
     {
-        super(theX, theY, theDir, DEATH_TIME);
+        super(theX, theY, theDir);
     }
 
     /**
@@ -55,7 +56,7 @@ public class Atv extends AbstractVehicle{
      * @return a valid direction for the ATV to travel in.
      */
     private Direction randomMoveSet(final Map<Direction, Terrain> theNeighbors) {
-        ArrayList<Direction> possiblemoves = new ArrayList<>(3);
+        final ArrayList<Direction> possiblemoves = new ArrayList<>(3);
 
         if ((theNeighbors.get(getDirection()) != Terrain.WALL)){
             possiblemoves.add(getDirection());
@@ -69,5 +70,14 @@ public class Atv extends AbstractVehicle{
         Collections.shuffle(possiblemoves);
 
         return possiblemoves.remove(0);
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return DEATH_TIME;
     }
 }

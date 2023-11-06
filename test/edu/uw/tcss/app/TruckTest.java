@@ -362,4 +362,16 @@ public class TruckTest {
         othert.collide(TEST_TRUCK);
         assertTrue(othert.isAlive(), "These vehicles are both trucks so the other truck vehicle should not be die.");
     }
+
+    /**
+     * tests if the toString returns the toString for truck properly
+     */
+    @Test
+    public void testTruckToString(){
+        setUp();
+        String teststring = TEST_TRUCK.toString();
+
+        assertEquals(teststring, TEST_TRUCK.toString(), "This string should return the class " +
+                "followed by position, direction, and status.");
+    }
 }

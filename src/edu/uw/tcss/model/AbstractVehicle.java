@@ -18,10 +18,6 @@ package edu.uw.tcss.model;
  */
 public abstract class AbstractVehicle implements Vehicle {
     /**
-     * This instance field stores the death time of the vehicle.
-     */
-    private final int DEATH_TIME;
-    /**
      * This instance field stores the X position of the vehicle.
      */
     private int myX;
@@ -53,10 +49,6 @@ public abstract class AbstractVehicle implements Vehicle {
      * This instance field stores the intiial direction of the vehicle.
      */
     private final Direction myInitialDir;
-    /**
-     * This instance field stores the initial status of the vehicle.
-     */
-    private final boolean myInitialStatus;
 
     /**
      * This protected constructor instantiates the common instance fields for vehicles and includes
@@ -66,9 +58,8 @@ public abstract class AbstractVehicle implements Vehicle {
      * @param theX is the x position vehicle.
      * @param theY is the y position of the vehicle.
      * @param theDir is the direction of the vehicle.
-     * @param theDeathTime is time the vehicle takes to die.
      */
-    protected AbstractVehicle(final int theX, final int theY, final Direction theDir, final int theDeathTime){
+    protected AbstractVehicle(final int theX, final int theY, final Direction theDir){
         super();
         myX = theX;
         myY = theY;
@@ -76,11 +67,9 @@ public abstract class AbstractVehicle implements Vehicle {
         myStatus = true;
         myPokes = 0;
 
-        DEATH_TIME = theDeathTime;
         myInitialX = theX;
         myInitialY = theY;
         myInitialDir = theDir;
-        myInitialStatus = true;
     }
 
     /**
@@ -143,7 +132,7 @@ public abstract class AbstractVehicle implements Vehicle {
         setDirection(myInitialDir);
         setX(myInitialX);
         setY(myInitialY);
-        myStatus = myInitialStatus;
+        myStatus = true;
     }
 
     /**
@@ -178,15 +167,6 @@ public abstract class AbstractVehicle implements Vehicle {
     }
 
     /**
-     * Getter method for the death time parameter.
-     * @return the time it takes to revive.
-     */
-    @Override
-    public int getDeathTime(){
-        return DEATH_TIME;
-    }
-
-    /**
      * Checks whether the vehicle is alive or dead.
      * @return a boolean true if the vehicle is alive and false if the vehicle is dead.
      */
@@ -201,11 +181,21 @@ public abstract class AbstractVehicle implements Vehicle {
     @Override
     public void poke(){
         myPokes++;
-        if (myPokes > DEATH_TIME && !myStatus)
+        if (myPokes > getDeathTime() && !myStatus)
         {
-            myStatus = myInitialStatus;
+            myStatus = true;
             myPokes = 0;
             setDirection(Direction.random());
         }
+    }
+
+    /**
+     * This toString is used for testing the vehicle classes which inheret from abstract vehicle.
+     * It returns a string containing the class name, its position, direction, and status.
+     */
+    @Override
+    public String toString() {
+        return getClass().getSimpleName().toLowerCase() + ", X position:" + getX() + " ,Y position" + getY()
+                + ", Direction:" + getDirection() + ", Status: " + isAlive();
     }
 }

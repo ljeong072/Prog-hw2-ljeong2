@@ -22,9 +22,6 @@ import java.util.Scanner;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-
-
-
 /**
  * A utility class for The Road Rage application. 
  * 
@@ -71,7 +68,6 @@ public final class FileLoader {
         return result;
     }
     
-    
     /**
      * Reads the grid portion of the map file.
      * 
@@ -110,12 +106,10 @@ public final class FileLoader {
             final char vehicleDirection = theInput.next().charAt(0);
 
             switch (vehicleType) {
-
                 case 'B': // Bicycle
                     vehicles.add(new Bicycle(vehicleX, vehicleY,
                                                Direction.valueOf(vehicleDirection)));
                     break;
-                /**
                 case 'A': //ATV
                     vehicles.add(new Atv(vehicleX, vehicleY,
                                                Direction.valueOf(vehicleDirection)));
@@ -136,7 +130,6 @@ public final class FileLoader {
                     vehicles.add(new Car(vehicleX, vehicleY,
                                             Direction.valueOf(vehicleDirection)));
                     break;
-                 */
                 default:
                     // this should never happen
                     assert false;

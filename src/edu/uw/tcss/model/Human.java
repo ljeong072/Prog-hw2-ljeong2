@@ -15,14 +15,13 @@ public class Human extends AbstractVehicle {
     private static final int DEATH_TIME = 45;
 
     /**
-     * This Human constructor creates a vehicle which passes the X, Y positions and the current direction along with
-     * the death time constant.
+     * This Human constructor creates a vehicle which passes the X, Y positions and the current direction.
      * @param theX is the current position of the human.
      * @param theY is the current position of the human.
      * @param theDir is the current position of the human.
      */
     public Human(final int theX, final int theY, final Direction theDir) {
-        super(theX, theY, theDir, DEATH_TIME);
+        super(theX, theY, theDir);
     }
 
     /**
@@ -33,7 +32,7 @@ public class Human extends AbstractVehicle {
      */
     @Override
     public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
-        Direction findirection;
+        final Direction findirection;
         final String crosswalk = isCrossWalk(theNeighbors);
 
         if (!crosswalk.isEmpty()) {
@@ -111,5 +110,14 @@ public class Human extends AbstractVehicle {
 
         Collections.shuffle(moveset);
         return moveset.get(0);
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return DEATH_TIME;
     }
 }

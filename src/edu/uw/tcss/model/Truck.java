@@ -18,14 +18,13 @@ public class Truck extends AbstractVehicle {
     private static final int DEATH_TIME = 0;
 
     /**
-    * This truck constructor creates a vehicle which passes the X, Y positions and the current direction along with
-    * the death time constant.
+    * This truck constructor creates a vehicle which passes the X, Y positions and the current direction.
     * @param theX is the current position of the truck.
     * @param theY is the current position of the truck.
     * @param theDir is the current position of the truck.
     */
     public Truck(final int theX, final int theY, final Direction theDir) {
-        super(theX, theY, theDir, DEATH_TIME);
+        super(theX, theY, theDir);
     }
 
     /**
@@ -68,7 +67,7 @@ public class Truck extends AbstractVehicle {
      * @return a random direction and reverse if necessary.
      */
     private Direction randomizerset(final Map<Direction, Terrain> theNeighbors) {
-        ArrayList<Direction> moveset = new ArrayList<>();
+        final ArrayList<Direction> moveset = new ArrayList<>();
 
         if (isViableOption(theNeighbors, getDirection())) {
             moveset.add(getDirection());
@@ -98,6 +97,15 @@ public class Truck extends AbstractVehicle {
         return (theNeighbors.get(theDirection) == Terrain.STREET) ||
                 (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
                 (theNeighbors.get(theDirection) == Terrain.LIGHT);
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return DEATH_TIME;
     }
 }
 

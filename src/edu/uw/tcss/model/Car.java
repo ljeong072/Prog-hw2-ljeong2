@@ -13,14 +13,13 @@ public class Car extends AbstractVehicle{
     private static final int DEATH_TIME = 15;
 
     /**
-     * This car constructor creates a vehicle which passes the X, Y positions and the current direction along with
-     * the death time constant.
+     * This car constructor creates a vehicle which passes the X, Y positions and the current direction.
      * @param theX is the current x position of the Car.
      * @param theY is the current y position of the Car.
      * @param theDir is the current direction of the Car.
      */
     public Car(final int theX, final int theY, final Direction theDir) {
-        super(theX, theY, theDir, DEATH_TIME);
+        super(theX, theY, theDir);
     }
 
     /**
@@ -31,7 +30,7 @@ public class Car extends AbstractVehicle{
      */
     @Override
     public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
-        Direction findirection;
+        final Direction findirection;
 
         if (isViableOption(theNeighbors, getDirection()))
         {
@@ -80,5 +79,14 @@ public class Car extends AbstractVehicle{
         return (theNeighbors.get(theDirection) == Terrain.STREET) ||
                 (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
                 (theNeighbors.get(theDirection) == Terrain.LIGHT);
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return DEATH_TIME;
     }
 }
