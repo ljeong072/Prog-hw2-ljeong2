@@ -64,15 +64,16 @@ public class Taxi extends AbstractVehicle{
      * @return a boolean true if the car can pass, and false if the vehicle cannot pass.
      */
     @Override
-    public boolean canPass(final Terrain theTerrain, final Light theLight){
-        boolean stoplight = theTerrain != Terrain.LIGHT || theLight != Light.RED;
+    public boolean canPass(final Terrain theTerrain, final Light theLight) {
+        boolean stoplight = ViableCanPass(theTerrain, theLight);
 
-        if (theTerrain == Terrain.CROSSWALK && theLight == Light.RED || (theTerrain == Terrain.CROSSWALK && theLight == Light.YELLOW)) {
-            stoplight = false;
+        if ((theTerrain == Terrain.CROSSWALK) && (theLight == Light.RED))
+        {
             myCycle++;
         }
 
-        if (myCycle == CYCLE_THRESH_HOLD || stoplight) {
+        if (myCycle == CYCLE_THRESH_HOLD)
+        {
             stoplight = true;
             myCycle = 0;
         }
@@ -91,5 +92,27 @@ public class Taxi extends AbstractVehicle{
         return (theNeighbors.get(theDirection) == Terrain.STREET) ||
                 (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
                 (theNeighbors.get(theDirection) == Terrain.LIGHT);
+    }
+
+    /**
+     * This helper method determines if the vehicle can pass this terrain given the terrain and light
+     * status.
+     * @param theTerrain is the terrain the vehicle wants to pass.
+     * @param theLight is the light color in the cycle.
+     * @return a boolean true if the vehicle can pass and false if the vehicle cannot pass.
+     */
+    private boolean ViableCanPass(final Terrain theTerrain, final Light theLight) {
+        boolean stoplight = theTerrain == Terrain.STREET;
+
+        if (theTerrain == Terrain.LIGHT && theLight == Light.GREEN) {
+            stoplight = true;
+        } else if (theTerrain == Terrain.LIGHT && theLight == Light.YELLOW) {
+            stoplight = true;
+        } else if (theTerrain == Terrain.CROSSWALK && theLight == Light.GREEN) {
+            stoplight = true;
+        } else if (theTerrain == Terrain.CROSSWALK && theLight == Light.YELLOW) {
+            stoplight = true;
+        }
+        return stoplight;
     }
 }

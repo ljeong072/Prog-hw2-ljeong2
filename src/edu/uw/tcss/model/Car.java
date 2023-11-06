@@ -57,13 +57,13 @@ public class Car extends AbstractVehicle{
     public boolean canPass(final Terrain theTerrain, final Light theLight) {
         boolean stoplight = false;
 
-        if (theTerrain == Terrain.LIGHT && theLight == Light.GREEN) {
+        if (theTerrain == Terrain.STREET) {
+            stoplight = true;
+        } else if (theTerrain == Terrain.LIGHT && theLight == Light.GREEN) {
             stoplight = true;
         } else if (theTerrain == Terrain.LIGHT && theLight == Light.YELLOW) {
             stoplight = true;
         } else if (theTerrain == Terrain.CROSSWALK && theLight == Light.GREEN) {
-            stoplight = true;
-        } else if (theTerrain == Terrain.STREET){
             stoplight = true;
         }
         return stoplight;
@@ -76,8 +76,7 @@ public class Car extends AbstractVehicle{
      * @param theDirection is the direction that this method checks to see is viable
      * @return a boolean true if the given direction is a viable terrain to traverse.
      */
-    private boolean isViableOption(final Map<Direction, Terrain> theNeighbors, final Direction theDirection)
-    {
+    private boolean isViableOption(final Map<Direction, Terrain> theNeighbors, final Direction theDirection){
         return (theNeighbors.get(theDirection) == Terrain.STREET) ||
                 (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
                 (theNeighbors.get(theDirection) == Terrain.LIGHT);

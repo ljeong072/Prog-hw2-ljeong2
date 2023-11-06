@@ -115,7 +115,7 @@ public final class FileLoader {
                     vehicles.add(new Bicycle(vehicleX, vehicleY,
                                                Direction.valueOf(vehicleDirection)));
                     break;
-
+                /**
                 case 'A': //ATV
                     vehicles.add(new Atv(vehicleX, vehicleY,
                                                Direction.valueOf(vehicleDirection)));
@@ -136,6 +136,7 @@ public final class FileLoader {
                     vehicles.add(new Car(vehicleX, vehicleY,
                                             Direction.valueOf(vehicleDirection)));
                     break;
+                 */
                 default:
                     // this should never happen
                     assert false;

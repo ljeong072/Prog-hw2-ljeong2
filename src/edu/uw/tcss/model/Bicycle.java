@@ -13,6 +13,7 @@ public class Bicycle extends AbstractVehicle{
      * This constant holds the time of death for the bicycle class.
      */
     private static final int DEATH_TIME = 35;
+
     /**
      * The bicycle constructor creates a bicycle object via the abstract vehicle constructor
      * and passes the X and Y position along with the direction.
@@ -76,14 +77,10 @@ public class Bicycle extends AbstractVehicle{
     public boolean canPass(final Terrain theTerrain, final Light theLight) {
         boolean stoplight = false;
 
-        if (theTerrain == Terrain.LIGHT && theLight == Light.YELLOW)
+        if ((theTerrain == Terrain.TRAIL) || (theTerrain == Terrain.STREET))
         {
             stoplight = true;
-        } else if (theTerrain == Terrain.LIGHT && theLight == Light.RED)
-        {
-            stoplight = true;
-        } else if (theTerrain != Terrain.GRASS && theTerrain != Terrain.WALL)
-        {
+        } else if (theTerrain == Terrain.LIGHT && theLight == Light.GREEN) {
             stoplight = true;
         }
         return stoplight;
