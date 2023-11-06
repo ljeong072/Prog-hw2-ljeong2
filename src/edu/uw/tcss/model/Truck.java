@@ -20,9 +20,9 @@ public class Truck extends AbstractVehicle {
     /**
     * This truck constructor creates a vehicle which passes the X, Y positions and the current direction along with
     * the death time constant.
-    * @param theX is the current position of the car.
-    * @param theY is the current position of the car.
-    * @param theDir is the current position of the car.
+    * @param theX is the current position of the truck.
+    * @param theY is the current position of the truck.
+    * @param theDir is the current position of the truck.
     */
     public Truck(final int theX, final int theY, final Direction theDir) {
         super(theX, theY, theDir, DEATH_TIME);
@@ -53,11 +53,9 @@ public class Truck extends AbstractVehicle {
         if (theTerrain == Terrain.STREET || theTerrain == Terrain.LIGHT)
         {
             stoplight = true;
-        }
-        if (theTerrain == Terrain.CROSSWALK && theLight == Light.GREEN) {
+        } else if (theTerrain == Terrain.CROSSWALK && theLight == Light.GREEN) {
             stoplight = true;
-        }
-        if (theTerrain == Terrain.CROSSWALK && theLight == Light.YELLOW)
+        } else if (theTerrain == Terrain.CROSSWALK && theLight == Light.YELLOW)
         {
             stoplight = true;
         }
@@ -72,19 +70,13 @@ public class Truck extends AbstractVehicle {
     private Direction randomizerset(final Map<Direction, Terrain> theNeighbors) {
         ArrayList<Direction> moveset = new ArrayList<>();
 
-        if ((theNeighbors.get(getDirection()) == Terrain.CROSSWALK
-                || theNeighbors.get(getDirection()) == Terrain.LIGHT
-                || theNeighbors.get(getDirection()) == Terrain.STREET)) {
+        if (isViableOption(theNeighbors, getDirection())) {
             moveset.add(getDirection());
         }
-        if ((theNeighbors.get(getDirection().right()) == Terrain.CROSSWALK
-                || theNeighbors.get(getDirection().right()) == Terrain.LIGHT
-                || theNeighbors.get(getDirection().right()) == Terrain.STREET)) {
+        if (isViableOption(theNeighbors, getDirection().right())) {
             moveset.add(getDirection().right());
         }
-        if ((theNeighbors.get(getDirection().left()) == Terrain.CROSSWALK
-                || theNeighbors.get(getDirection().left()) == Terrain.LIGHT
-                || theNeighbors.get(getDirection().left()) == Terrain.STREET)) {
+        if (isViableOption(theNeighbors, getDirection().left())) {
             moveset.add(getDirection().left());
         }
         if (moveset.isEmpty()) {
@@ -92,6 +84,20 @@ public class Truck extends AbstractVehicle {
         }
         Collections.shuffle(moveset);
         return moveset.get(0);
+    }
+
+    /**
+     * helper method to determine whether the direction is a viable direction.
+     * @param theNeighbors a map containing the terrain adjacent to the truck.
+     * @param theDirection is the direction the truck is checking.
+     * @return a boolean true if the direction is possible,
+     * and false if the direction is not possible.
+     */
+    private boolean isViableOption(final Map<Direction, Terrain> theNeighbors, final Direction theDirection)
+    {
+        return (theNeighbors.get(theDirection) == Terrain.STREET) ||
+                (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
+                (theNeighbors.get(theDirection) == Terrain.LIGHT);
     }
 }
 

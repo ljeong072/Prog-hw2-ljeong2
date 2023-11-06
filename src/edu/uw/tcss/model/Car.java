@@ -15,9 +15,9 @@ public class Car extends AbstractVehicle{
     /**
      * This car constructor creates a vehicle which passes the X, Y positions and the current direction along with
      * the death time constant.
-     * @param theX is the current x position of the car.
-     * @param theY is the current y position of the car.
-     * @param theDir is the current direction of the car.
+     * @param theX is the current x position of the Car.
+     * @param theY is the current y position of the Car.
+     * @param theDir is the current direction of the Car.
      */
     public Car(final int theX, final int theY, final Direction theDir) {
         super(theX, theY, theDir, DEATH_TIME);

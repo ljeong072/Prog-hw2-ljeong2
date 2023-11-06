@@ -59,8 +59,9 @@ public abstract class AbstractVehicle implements Vehicle {
     private final boolean myInitialStatus;
 
     /**
-     * This protected constructor instantiates the common fields for vehicles and includes the position, intiial position,
-     * direction, initial direction, pokes, death time, the status, and the initial status.
+     * This protected constructor instantiates the common instance fields for vehicles and includes
+     * the position, intiial position, direction, initial direction, pokes, death time,
+     * the status, and the initial status.
      *
      * @param theX is the x position vehicle.
      * @param theY is the y position of the vehicle.

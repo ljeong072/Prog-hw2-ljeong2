@@ -17,6 +17,9 @@ public class Atv extends AbstractVehicle{
     /**
      * constructor which passes the x and y position with the direction to the AbstractVehicle
      * constructor while also setting the death time and status.
+     * @param theX is the current x position of the Atv.
+     * @param theY is the current y position of the Atv.
+     * @param theDir is the current direction of the Atv.
      */
     public Atv(final int theX, final int theY, final Direction theDir)
     {
@@ -52,7 +55,7 @@ public class Atv extends AbstractVehicle{
      * @return a valid direction for the ATV to travel in.
      */
     private Direction randomMoveSet(final Map<Direction, Terrain> theNeighbors) {
-        final ArrayList<Direction> possiblemoves = new ArrayList<>(3);
+        ArrayList<Direction> possiblemoves = new ArrayList<>(3);
 
         if ((theNeighbors.get(getDirection()) != Terrain.WALL)){
             possiblemoves.add(getDirection());

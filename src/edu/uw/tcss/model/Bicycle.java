@@ -16,6 +16,9 @@ public class Bicycle extends AbstractVehicle{
     /**
      * The bicycle constructor creates a bicycle object via the abstract vehicle constructor
      * and passes the X and Y position along with the direction.
+     * @param theX is the current x position of the Bicycle.
+     * @param theY is the current y position of the Bicycle.
+     * @param theDir is the current direction of the Bicycle.
      */
     public Bicycle(final int theX, final int theY, final Direction theDir) {
         super(theX, theY, theDir, DEATH_TIME);
@@ -52,14 +55,11 @@ public class Bicycle extends AbstractVehicle{
     private Direction secondaryBicycleMoveSet(final Map<Direction, Terrain> theNeighbors) {
         Direction possiblemove;
 
-        if ((theNeighbors.get(getDirection()) == Terrain.STREET ||
-                theNeighbors.get(getDirection()) == Terrain.LIGHT || theNeighbors.get(getDirection()) == Terrain.CROSSWALK)) {
+        if (isViableOption(theNeighbors, getDirection())){
             possiblemove = getDirection();
-        } else if ((theNeighbors.get(getDirection().left()) == Terrain.STREET) || (theNeighbors.get(getDirection().right()) == Terrain.LIGHT)
-                || (theNeighbors.get(getDirection().left()) == Terrain.CROSSWALK)) {
+        } else if (isViableOption(theNeighbors, getDirection().left())) {
             possiblemove = getDirection().left();
-        } else if ((theNeighbors.get(getDirection().right()) == Terrain.STREET) || (theNeighbors.get(getDirection().left()) == Terrain.LIGHT)
-                || (theNeighbors.get(getDirection().right()) == Terrain.CROSSWALK)) {
+        } else if (isViableOption(theNeighbors, getDirection().right())) {
             possiblemove = getDirection().right();
         } else {
             possiblemove = getDirection().reverse();
@@ -79,12 +79,10 @@ public class Bicycle extends AbstractVehicle{
         if (theTerrain == Terrain.LIGHT && theLight == Light.YELLOW)
         {
             stoplight = true;
-        }
-        if (theTerrain == Terrain.LIGHT && theLight == Light.RED)
+        } else if (theTerrain == Terrain.LIGHT && theLight == Light.RED)
         {
             stoplight = true;
-        }
-        if (theTerrain != Terrain.GRASS && theTerrain != Terrain.WALL)
+        } else if (theTerrain != Terrain.GRASS && theTerrain != Terrain.WALL)
         {
             stoplight = true;
         }
@@ -107,5 +105,19 @@ public class Bicycle extends AbstractVehicle{
             path = "RIGHT";
         }
         return path;
+    }
+
+    /**
+     * helper method to determine whether the direction is a viable direction.
+     * @param theNeighbors a map containing the terrain adjacent to the truck.
+     * @param theDirection is the direction the truck is checking.
+     * @return a boolean true if the direction is possible,
+     * and false if the direction is not possible.
+     */
+    private boolean isViableOption(final Map<Direction, Terrain> theNeighbors, final Direction theDirection)
+    {
+        return (theNeighbors.get(theDirection) == Terrain.STREET) ||
+                (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
+                (theNeighbors.get(theDirection) == Terrain.LIGHT);
     }
 }
