@@ -11,6 +11,9 @@ import java.util.Collections;
  * @param <T> is a generic data type for the bag class.
  */
 public class MyBag<T> implements Bag<T>{
+    /**
+     * this instance field contains an arraylist which stores the generic type T items in the bag.
+     */
     private final ArrayList<T> myList;
 
     /**

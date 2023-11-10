@@ -13,9 +13,9 @@ package edu.uw.tcss.util.Bag;
 public interface Bag<T> {
     /**
      * Allows you to put a generic type T into the Bag ADT.
-     * @param theItem is a generic type item to be put in the bag.
+     * @param theAdt is a generic type T to be put in the bag.
      */
-    void putBag(T theItem);
+    void putBag(T theAdt);
 
     /**
      * Allows you to grab a randomized generic type T based on what is already added in the bag.
