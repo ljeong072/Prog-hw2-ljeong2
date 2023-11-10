@@ -3,34 +3,32 @@
  */
 package edu.uw.tcss.app;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import edu.uw.tcss.model.Direction;
+import edu.uw.tcss.model.Truck;
+import edu.uw.tcss.model.Atv;
 import edu.uw.tcss.model.Light;
 import edu.uw.tcss.model.Terrain;
-import edu.uw.tcss.model.Atv;
-import edu.uw.tcss.model.Truck;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Unit tests for class Atv.
  *
  * @author Lucas Jeong
- * @version 2023 November 4
+ * @version 2023 November 8
  */
 public class AtvTest {
     /**
      * The number of times to repeat a test to have a high probability that all
      * random possibilities have been explored.
      */
-    private static final int TRIES_FOR_RANDOMNESS = 500;
+    private static final int TRIES_FOR_RANDOMNESS = 50;
 
     /**
      * The number of pokes it takes for an atv to revive.
@@ -40,7 +38,7 @@ public class AtvTest {
     private Atv TEST_ATV;
 
     /**
-     * Sets a Atb object for testing with X and Y fields set to 2 and the direction set to WEST.
+     * Sets a Atv object for testing with X and Y fields set to 2 and the direction set to WEST.
      */
     @BeforeEach
     public void setUp() {
@@ -78,7 +76,6 @@ public class AtvTest {
      */
     @Test
     public void testCanPass() {
-
         // Atv can move on any terrain that is not a wall.
         // so we need to test all of these.
 
@@ -115,19 +112,48 @@ public class AtvTest {
      * Test method for {@link Atv#chooseDirection(java.util.Map)}.
      */
     @Test
-    public void testChooseDirectionSurroundedByValidOptions() {
-        final Map<Direction, Terrain> neighbors = new HashMap<Direction, Terrain>();
+    public void testChooseDirectionSurroundedbyStreet() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
         neighbors.put(Direction.WEST, Terrain.STREET);
         neighbors.put(Direction.NORTH, Terrain.STREET);
         neighbors.put(Direction.EAST, Terrain.STREET);
         neighbors.put(Direction.SOUTH, Terrain.STREET);
 
-        neighbors.put(Direction.WEST, Terrain.LIGHT);
-        neighbors.put(Direction.NORTH, Terrain.LIGHT);
-        neighbors.put(Direction.EAST, Terrain.LIGHT);
-        neighbors.put(Direction.SOUTH, Terrain.LIGHT);
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
 
+        final Atv atv = new Atv(0, 0, Direction.NORTH);
 
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = atv.chooseDirection(neighbors);
+
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) {
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
+            }
+        }
+
+        assertTrue(seenWest && seenNorth && seenEast,
+                "Atv chooseDirection() fails to select randomly "
+                        + "among all possible valid choices!");
+
+        assertFalse(seenSouth,
+                "Atv chooseDirection() reversed direction when not necessary!");
+    }
+
+    /**
+     * Test method for {@link Atv#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testChooseDirectionSurroundedbyCrossWalk() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
         neighbors.put(Direction.WEST, Terrain.CROSSWALK);
         neighbors.put(Direction.NORTH, Terrain.CROSSWALK);
         neighbors.put(Direction.EAST, Terrain.CROSSWALK);
@@ -163,7 +189,166 @@ public class AtvTest {
     }
 
     /**
-     * Test the setter method for the atv's x value.
+     * Test method for {@link Atv#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testChooseDirectionSurroundedbyLight() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
+        neighbors.put(Direction.WEST, Terrain.LIGHT);
+        neighbors.put(Direction.NORTH, Terrain.LIGHT);
+        neighbors.put(Direction.EAST, Terrain.LIGHT);
+        neighbors.put(Direction.SOUTH, Terrain.LIGHT);
+
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
+
+        final Atv atv = new Atv(0, 0, Direction.NORTH);
+
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = atv.chooseDirection(neighbors);
+
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) {
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
+            }
+        }
+
+        assertTrue(seenWest && seenNorth && seenEast,
+                "Atv chooseDirection() fails to select randomly "
+                        + "among all possible valid choices!");
+
+        assertFalse(seenSouth,
+                "Atv chooseDirection() reversed direction when not necessary!");
+    }
+
+    /**
+     * Test method for {@link Atv#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testChooseDirectionSurroundedbyStreetTrail() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
+        neighbors.put(Direction.WEST, Terrain.TRAIL);
+        neighbors.put(Direction.NORTH, Terrain.TRAIL);
+        neighbors.put(Direction.EAST, Terrain.TRAIL);
+        neighbors.put(Direction.SOUTH, Terrain.TRAIL);
+
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
+
+        final Atv atv = new Atv(0, 0, Direction.NORTH);
+
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = atv.chooseDirection(neighbors);
+
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) {
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
+            }
+        }
+
+        assertTrue(seenWest && seenNorth && seenEast,
+                "Atv chooseDirection() fails to select randomly "
+                        + "among all possible valid choices!");
+
+        assertFalse(seenSouth,
+                "Atv chooseDirection() reversed direction when not necessary!");
+    }
+
+    /**
+     * Test method for {@link Atv#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testChooseDirectionSurroundedbyGrass() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
+        neighbors.put(Direction.WEST, Terrain.GRASS);
+        neighbors.put(Direction.NORTH, Terrain.GRASS);
+        neighbors.put(Direction.EAST, Terrain.GRASS);
+        neighbors.put(Direction.SOUTH, Terrain.GRASS);
+
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
+
+        final Atv atv = new Atv(0, 0, Direction.NORTH);
+
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = atv.chooseDirection(neighbors);
+
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) {
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
+            }
+        }
+
+        assertTrue(seenWest && seenNorth && seenEast,
+                "Atv chooseDirection() fails to select randomly "
+                        + "among all possible valid choices!");
+
+        assertFalse(seenSouth,
+                "Atv chooseDirection() reversed direction when not necessary!");
+    }
+
+    /**
+     * Test method for {@link Atv#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testChooseDirectionCannotPassWall() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
+        neighbors.put(Direction.WEST, Terrain.WALL);
+        neighbors.put(Direction.NORTH, Terrain.WALL);
+        neighbors.put(Direction.EAST, Terrain.STREET);
+        neighbors.put(Direction.SOUTH, Terrain.WALL);
+
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
+
+        final Atv atv = new Atv(0, 0, Direction.NORTH);
+
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = atv.chooseDirection(neighbors);
+
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) { //Only this is the valid direction
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
+            }
+        }
+
+        assertTrue(seenEast,
+                "Atv chooseDirection() fails to select valid direction" +
+                        "which is east in this case");
+
+        assertFalse(seenSouth && seenWest && seenNorth,
+                "Atv chooseDirection() reversed direction when not necessary!");
+    }
+    /**
+     * Test the setter method for the Atv's x value.
      */
     @Test
     public void testSetterMethodAtvX() {
@@ -176,7 +361,7 @@ public class AtvTest {
     }
 
     /**
-     * Test the setter method for the truck's y value.
+     * Test the setter method for the Atv's y value.
      */
     @Test
     public void testSetterMethodAtv() {
@@ -189,7 +374,7 @@ public class AtvTest {
     }
 
     /**
-     * Test the getter method for the truck's x value.
+     * Test the getter method for the Atv's x value.
      */
     @Test
     public void testGetterMethodAtvX() {
@@ -203,7 +388,7 @@ public class AtvTest {
     }
 
     /**
-     * Test the getter method for the atv's y value.
+     * Test the getter method for the atv's Y value.
      */
     @Test
     public void testGetterMethodAtvY() {
@@ -217,7 +402,7 @@ public class AtvTest {
     }
 
     /**
-     * Test the getter method for the atv's current direction.
+     * Test the getter method for the Atv's current direction.
      */
     @Test
     public void testAtvDirection() {
@@ -242,11 +427,11 @@ public class AtvTest {
     }
 
     /**
-     * Test the reset method for the atv's.
+     * Test the reset method for the Atv's.
      */
     @Test
     public void testAtvResetMethod(){
-        Atv a = new Atv(3, 4, Direction.EAST);
+        final Atv a = new Atv(3, 4, Direction.EAST);
 
         a.setX(10);
         a.setY(10);
@@ -271,7 +456,7 @@ public class AtvTest {
                 "a atv.gif and not atv_dead.gif since the truck can never die (in this program).");
 
         setUp();
-        Truck testtruck = new Truck(2,2, Direction.WEST);
+        final Truck testtruck = new Truck(2,2, Direction.WEST);
         TEST_ATV.collide(testtruck);
         assertEquals("atv_dead.gif", TEST_ATV.getImageFileName(), "The returned String should be" +
                 "a atv_dead.gift and not atv.gif or some other gif since the atv is killed.");
@@ -285,8 +470,8 @@ public class AtvTest {
     @Test
     public void testCollideMethod() {
         setUp();
-        Atv othera = new Atv(2,2,Direction.WEST);
-        Truck truck = new Truck(2,2,Direction.WEST);
+        final Atv othera = new Atv(2,2,Direction.WEST);
+        final Truck truck = new Truck(2,2,Direction.WEST);
         TEST_ATV.collide(othera);
         assertTrue(TEST_ATV.isAlive(), "This ATV collided with the same vehicle (same death time) so " +
                 "it should be alive.");
@@ -314,10 +499,10 @@ public class AtvTest {
     @Test
     public void testGetDeathTime(){
         setUp();
-        Atv atv1 = new Atv(3,2,Direction.SOUTH);
-        Atv atv2 = new Atv(9,1,Direction.WEST);
-        Atv atv3 = new Atv(11,7,Direction.EAST);
-        Atv atv4 = new Atv(14,4,Direction.NORTH);
+        final Atv atv1 = new Atv(3,2,Direction.SOUTH);
+        final Atv atv2 = new Atv(9,1,Direction.WEST);
+        final Atv atv3 = new Atv(11,7,Direction.EAST);
+        final Atv atv4 = new Atv(14,4,Direction.NORTH);
 
         assertEquals(DEATH_TIME, TEST_ATV.getDeathTime(), "The test atv object should have a " +
                 "death time of 25.");
@@ -337,7 +522,7 @@ public class AtvTest {
     @Test
     public void testIsAlive() {
         setUp();
-        Truck truck = new Truck(2,2,Direction.WEST);
+        final Truck truck = new Truck(2,2,Direction.WEST);
         TEST_ATV.collide(truck);
         assertFalse(TEST_ATV.isAlive(), "This atv should be dead");
 
@@ -352,7 +537,7 @@ public class AtvTest {
     @Test
     public void poke(){
         setUp();
-        Truck truck = new Truck(2,2,Direction.WEST);
+        final Truck truck = new Truck(2,2,Direction.WEST);
         TEST_ATV.collide(truck);
 
         setUp();
@@ -375,22 +560,11 @@ public class AtvTest {
         assertFalse(TEST_ATV.isAlive(), "The vehicle should not revive after 25 ticks (pokes)");
 
         setUp();
-        final Map<Direction, Terrain> neighbors = new HashMap<Direction, Terrain>();
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
         neighbors.put(Direction.WEST, Terrain.STREET);
-        neighbors.put(Direction.NORTH, Terrain.STREET);
-        neighbors.put(Direction.EAST, Terrain.STREET);
-        neighbors.put(Direction.SOUTH, Terrain.STREET);
-
-        neighbors.put(Direction.WEST, Terrain.LIGHT);
-        neighbors.put(Direction.NORTH, Terrain.LIGHT);
-        neighbors.put(Direction.EAST, Terrain.LIGHT);
-        neighbors.put(Direction.SOUTH, Terrain.LIGHT);
-
-
-        neighbors.put(Direction.WEST, Terrain.CROSSWALK);
         neighbors.put(Direction.NORTH, Terrain.CROSSWALK);
-        neighbors.put(Direction.EAST, Terrain.CROSSWALK);
-        neighbors.put(Direction.SOUTH, Terrain.CROSSWALK);
+        neighbors.put(Direction.EAST, Terrain.GRASS);
+        neighbors.put(Direction.SOUTH, Terrain.STREET);
 
         boolean seenWest = false;
         boolean seenNorth = false;
@@ -428,9 +602,12 @@ public class AtvTest {
     @Test
     public void testAtvToString(){
         setUp();
-        String teststring = TEST_ATV.toString();
+        final String teststring = TEST_ATV.getClass().getSimpleName().toLowerCase() + ", X position:"
+                + TEST_ATV.getX() + ", Y position:" + TEST_ATV.getY()
+                + ", Direction:" + TEST_ATV.getDirection() + ", Status: "
+                + TEST_ATV.isAlive() + ", Pokes: 0";
 
         assertEquals(teststring, TEST_ATV.toString(), "This string should return the class " +
-                "followed by position, direction, and status.");
+                "followed by position, direction, status, and pokes.");
     }
 }

@@ -1,5 +1,4 @@
 package edu.uw.tcss.model;
-
 /*
  * TCSS 305
  * File Name: AbstractVehicle.java
@@ -9,14 +8,18 @@ package edu.uw.tcss.model;
  */
 
 /**
- * This abstract class declares and stores instance variable all subclasses
- * must have, and a protected constructor to initialize the instance variable
- * holding the name of the type of of vehicle.
+ * This abstract class declares and stores instance variable that are common across all subclasses
+ * but specific to a particular instance of an object. It has a protected constructor to store
+ * these common instance fields and methods for each vehicle.
  *
  * @author Lucas Jeong
- * @version 2023 November 5
+ * @version 2023 November 9
  */
 public abstract class AbstractVehicle implements Vehicle {
+    /**
+     * This constant stores the death timer of the vehicle.
+     */
+    private final int myDeathTime;
     /**
      * This instance field stores the X position of the vehicle.
      */
@@ -46,7 +49,7 @@ public abstract class AbstractVehicle implements Vehicle {
      */
     private final int myInitialY;
     /**
-     * This instance field stores the intiial direction of the vehicle.
+     * This instance field stores the intial direction of the vehicle.
      */
     private final Direction myInitialDir;
 
@@ -55,17 +58,19 @@ public abstract class AbstractVehicle implements Vehicle {
      * the position, intiial position, direction, initial direction, pokes, death time,
      * the status, and the initial status.
      *
-     * @param theX is the x position vehicle.
-     * @param theY is the y position of the vehicle.
+     * @param theX is the X position of the vehicle.
+     * @param theY is the Y position of the vehicle.
      * @param theDir is the direction of the vehicle.
+     * @param theDeathTime is the amount of pokes required to revive a vehicle when dead.
      */
-    protected AbstractVehicle(final int theX, final int theY, final Direction theDir){
+    protected AbstractVehicle(final int theX, final int theY, final Direction theDir, final int theDeathTime){
         super();
         myX = theX;
         myY = theY;
         myDir = theDir;
         myStatus = true;
         myPokes = 0;
+        myDeathTime = theDeathTime;
 
         myInitialX = theX;
         myInitialY = theY;
@@ -79,6 +84,7 @@ public abstract class AbstractVehicle implements Vehicle {
     public void setX(final int theX){
         myX = theX;
     }
+
     /**
      * Setter method for the Y value in position.
      */
@@ -160,7 +166,7 @@ public abstract class AbstractVehicle implements Vehicle {
      */
     @Override
     public void collide(final Vehicle theOther){
-        if ((this.isAlive() && theOther.isAlive()) && this.getDeathTime() > theOther.getDeathTime())
+        if ((this.isAlive() && theOther.isAlive()) && this.myDeathTime > theOther.getDeathTime())
         {
             myStatus = false;
         }
@@ -181,7 +187,7 @@ public abstract class AbstractVehicle implements Vehicle {
     @Override
     public void poke(){
         myPokes++;
-        if (myPokes > getDeathTime() && !myStatus)
+        if (myPokes > myDeathTime)
         {
             myStatus = true;
             myPokes = 0;
@@ -195,7 +201,16 @@ public abstract class AbstractVehicle implements Vehicle {
      */
     @Override
     public String toString() {
-        return getClass().getSimpleName().toLowerCase() + ", X position:" + getX() + " ,Y position" + getY()
-                + ", Direction:" + getDirection() + ", Status: " + isAlive();
+        return getClass().getSimpleName().toLowerCase() + ", X position:" + getX() + ", Y position:" + getY()
+                + ", Direction:" + getDirection() + ", Status: " + isAlive() + ", Pokes: " + myPokes;
+    }
+
+    /**
+     * Getter method for the death time parameter.
+     * @return the time it takes to revive.
+     */
+    @Override
+    public int getDeathTime(){
+        return myDeathTime;
     }
 }

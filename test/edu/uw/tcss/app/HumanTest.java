@@ -1,7 +1,6 @@
 /*
  * TCSS 305 - Road Rage
  */
-
 package edu.uw.tcss.app;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +23,6 @@ import org.junit.jupiter.api.Test;
  * @version Autumn 2023
  */
 public class HumanTest {
-
     /**
      * The number of times to repeat a test to have a high probability that all
      * random possibilities have been explored.

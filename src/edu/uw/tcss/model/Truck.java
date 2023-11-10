@@ -1,15 +1,26 @@
 package edu.uw.tcss.model;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
+import edu.uw.tcss.util.Bag.MyBag;
 
+/*
+ * TCSS 305
+ * File Name: Truck.java
+ * Instructor: Charles Bryan
+ * Assignment: Programming Assignment 2
+ * Due Date: 11/10/2023
+ */
 
 /**
- * This is the Truck class which extends AbstractVehicle class. It can only traverse streets and through lights and
- * crosswalks. It will randomly drive straight, left, or right and will only reverese if necessary. If ignores all
- * traffic lights but will stop for red crosswalk lights. It's death time is 0 meaning it is the only vehicle which
+ * This is the Truck class which extends AbstractVehicle class. It can only traverse
+ * streets and through lights and crosswalks. It will randomly drive straight,
+ * left, or right and will only reverese if necessary. If ignores all
+ * traffic lights but will stop for red crosswalk lights. It's death
+ * time is 0 meaning it is the only vehicle which
  * cannot die.
+ *
+ * @author Lucas Jeong
+ * @version 2023 November 9
  */
 public class Truck extends AbstractVehicle {
     /**
@@ -18,24 +29,40 @@ public class Truck extends AbstractVehicle {
     private static final int DEATH_TIME = 0;
 
     /**
-    * This truck constructor creates a vehicle which passes the X, Y positions and the current direction.
+    * This truck constructor creates a vehicle which passes the X, Y positions
+     * and current direction and death timer.
     * @param theX is the current position of the truck.
     * @param theY is the current position of the truck.
     * @param theDir is the current position of the truck.
     */
     public Truck(final int theX, final int theY, final Direction theDir) {
-        super(theX, theY, theDir);
+        super(theX, theY, theDir, DEATH_TIME);
     }
 
     /**
-     * This method chooses a direction which is randomized. The following directions, if viable, are straight
+     * This method chooses a direction which is randomized.
+     * The following directions, if viable, are straight
      * left, and right. It will reverse only if necessary.
      * @param theNeighbors The map of neighboring terrain.
      * @return a direction that the car can travel in.
      */
     @Override
     public Direction chooseDirection(final Map<Direction, Terrain> theNeighbors) {
-        return randomizerset(theNeighbors);
+        final MyBag<Direction> thebag = new MyBag<>();
+
+        if (isViableOption(theNeighbors, getDirection())) {
+            thebag.putBag(getDirection());
+        }
+        if (isViableOption(theNeighbors, getDirection().right())) {
+            thebag.putBag(getDirection().right());
+        }
+        if (isViableOption(theNeighbors, getDirection().left())) {
+            thebag.putBag(getDirection().left());
+        }
+        if (thebag.getBagEmpty()) {
+            thebag.putBag(getDirection().reverse());
+        }
+        return thebag.grabBag();
     }
 
     /**
@@ -62,30 +89,6 @@ public class Truck extends AbstractVehicle {
     }
 
     /**
-     * This helper method contains a set of viable directions (straight, left, or right) and then randomizes them.
-     * @param theNeighbors is a map containing adjacent terrain of the truck.
-     * @return a random direction and reverse if necessary.
-     */
-    private Direction randomizerset(final Map<Direction, Terrain> theNeighbors) {
-        final ArrayList<Direction> moveset = new ArrayList<>();
-
-        if (isViableOption(theNeighbors, getDirection())) {
-            moveset.add(getDirection());
-        }
-        if (isViableOption(theNeighbors, getDirection().right())) {
-            moveset.add(getDirection().right());
-        }
-        if (isViableOption(theNeighbors, getDirection().left())) {
-            moveset.add(getDirection().left());
-        }
-        if (moveset.isEmpty()) {
-            moveset.add(getDirection().reverse());
-        }
-        Collections.shuffle(moveset);
-        return moveset.get(0);
-    }
-
-    /**
      * helper method to determine whether the direction is a viable direction.
      * @param theNeighbors a map containing the terrain adjacent to the truck.
      * @param theDirection is the direction the truck is checking.
@@ -97,15 +100,6 @@ public class Truck extends AbstractVehicle {
         return (theNeighbors.get(theDirection) == Terrain.STREET) ||
                 (theNeighbors.get(theDirection) == Terrain.CROSSWALK) ||
                 (theNeighbors.get(theDirection) == Terrain.LIGHT);
-    }
-
-    /**
-     * Getter method for the death time parameter.
-     * @return the time it takes to revive.
-     */
-    @Override
-    public int getDeathTime(){
-        return DEATH_TIME;
     }
 }
 

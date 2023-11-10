@@ -6,22 +6,22 @@ package edu.uw.tcss.app;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import edu.uw.tcss.model.*;
-
+import edu.uw.tcss.model.Direction;
+import edu.uw.tcss.model.Truck;
+import edu.uw.tcss.model.Light;
+import edu.uw.tcss.model.Terrain;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Unit tests for class Truck.
  *
  * @author Lucas Jeong
- * @version 2023 November 4
+ * @version 2023 November 9
  */
 public class TruckTest {
     /**
@@ -60,7 +60,7 @@ public class TruckTest {
 
     /** Test method for Truck setters. */
     @Test
-    public void testHumanSetters() {
+    public void testTruckSetters() {
         final Truck t = new Truck(10, 11, Direction.NORTH);
 
         t.setX(12);
@@ -130,23 +130,53 @@ public class TruckTest {
      * Test method for {@link Truck#chooseDirection(java.util.Map)}.
      */
     @Test
-    public void testChooseDirectionSurroundedByValidOptions() {
+    public void testChooseDirectionSurroundedByStreet() {
         final Map<Direction, Terrain> neighbors = new HashMap<Direction, Terrain>();
         neighbors.put(Direction.WEST, Terrain.STREET);
         neighbors.put(Direction.NORTH, Terrain.STREET);
         neighbors.put(Direction.EAST, Terrain.STREET);
         neighbors.put(Direction.SOUTH, Terrain.STREET);
 
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
+
+        final Truck truck = new Truck(0, 0, Direction.NORTH);
+
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = truck.chooseDirection(neighbors);
+
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) {
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
+            }
+        }
+
+        assertTrue(seenWest && seenNorth && seenEast,
+                "Truck chooseDirection() fails to select randomly "
+                        + "among all possible valid choices!");
+
+        assertFalse(seenSouth,
+                "Truck chooseDirection() reversed direction when not necessary!");
+    }
+
+
+    /**
+     * Test method for {@link Truck#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testChooseDirectionSurroundedByLight() {
+        final Map<Direction, Terrain> neighbors = new HashMap<Direction, Terrain>();
         neighbors.put(Direction.WEST, Terrain.LIGHT);
         neighbors.put(Direction.NORTH, Terrain.LIGHT);
         neighbors.put(Direction.EAST, Terrain.LIGHT);
         neighbors.put(Direction.SOUTH, Terrain.LIGHT);
-
-
-        neighbors.put(Direction.WEST, Terrain.CROSSWALK);
-        neighbors.put(Direction.NORTH, Terrain.CROSSWALK);
-        neighbors.put(Direction.EAST, Terrain.CROSSWALK);
-        neighbors.put(Direction.SOUTH, Terrain.CROSSWALK);
 
         boolean seenWest = false;
         boolean seenNorth = false;
@@ -181,25 +211,58 @@ public class TruckTest {
      * Test method for {@link Truck#chooseDirection(java.util.Map)}.
      */
     @Test
-    public void testChooseDirectionOnTruckTerrainMustReverse() {
+    public void testChooseDirectionSurroundedByCrossWalk() {
+        final Map<Direction, Terrain> neighbors = new HashMap<Direction, Terrain>();
+        neighbors.put(Direction.WEST, Terrain.STREET);
+        neighbors.put(Direction.NORTH, Terrain.STREET);
+        neighbors.put(Direction.EAST, Terrain.STREET);
+        neighbors.put(Direction.SOUTH, Terrain.STREET);
 
-        for (final Terrain t : Terrain.values()) {
-            if (t != Terrain.STREET && t != Terrain.CROSSWALK && t !=Terrain.LIGHT) {
+        boolean seenWest = false;
+        boolean seenNorth = false;
+        boolean seenEast = false;
+        boolean seenSouth = false;
 
-                final Map<Direction, Terrain> neighbors = new HashMap<Direction, Terrain>();
-                neighbors.put(Direction.WEST, t);
-                neighbors.put(Direction.NORTH, t);
-                neighbors.put(Direction.EAST, t);
-                neighbors.put(Direction.SOUTH, Terrain.GRASS);
+        final Truck truck = new Truck(0, 0, Direction.NORTH);
 
-                final Truck human = new Truck(0, 0, Direction.NORTH);
+        for (int count = 0; count < TRIES_FOR_RANDOMNESS; count++) {
+            final Direction d = truck.chooseDirection(neighbors);
 
-                // the Human must reverse and go SOUTH
-                assertEquals(Direction.SOUTH, human.chooseDirection(neighbors),
-                        "Truck chooseDirection() failed "
-                                + "when reverse was the only valid choice!");
+            if (d == Direction.WEST) {
+                seenWest = true;
+            } else if (d == Direction.NORTH) {
+                seenNorth = true;
+            } else if (d == Direction.EAST) {
+                seenEast = true;
+            } else if (d == Direction.SOUTH) { // this should NOT be chosen
+                seenSouth = true;
             }
         }
+
+        assertTrue(seenWest && seenNorth && seenEast,
+                "Truck chooseDirection() fails to select randomly "
+                        + "among all possible valid choices!");
+
+        assertFalse(seenSouth,
+                "Truck chooseDirection() reversed direction when not necessary!");
+    }
+
+
+    /**
+     * Test method for {@link Truck#chooseDirection(java.util.Map)}.
+     */
+    @Test
+    public void testTruckMustReverse() {
+        final Map<Direction, Terrain> neighbors = new HashMap<>();
+        neighbors.put(Direction.WEST, Terrain.WALL);
+        neighbors.put(Direction.NORTH, Terrain.WALL);
+        neighbors.put(Direction.EAST, Terrain.WALL);
+        neighbors.put(Direction.SOUTH, Terrain.STREET);
+
+        final Truck truck = new Truck(0, 0, Direction.NORTH);
+
+        assertTrue(truck.chooseDirection(neighbors) == Direction.SOUTH, "The truck must reverse" +
+                " since that is the only valid option");
     }
 
     /**
@@ -285,7 +348,7 @@ public class TruckTest {
      */
     @Test
     public void testTruckResetMethod(){
-        Truck t = new Truck(7, 9, Direction.SOUTH);
+        final Truck t = new Truck(7, 9, Direction.SOUTH);
 
         t.setX(5);
         t.setY(2);
@@ -318,7 +381,7 @@ public class TruckTest {
     @Test
     public void testCollideMethod() {
         setUp();
-        Truck othert = new Truck(1,1,Direction.NORTH);
+        final Truck othert = new Truck(1,1,Direction.NORTH);
         TEST_TRUCK.collide(othert);
         assertTrue(TEST_TRUCK.isAlive(), "These vehicles are both trucks so this truck vehicle should not die");
 
@@ -332,10 +395,10 @@ public class TruckTest {
     @Test
     public void testGetDeathTime(){
         setUp();
-        Truck truck1 = new Truck(3,2,Direction.SOUTH);
-        Truck truck2 = new Truck(9,1,Direction.WEST);
-        Truck truck3 = new Truck(11,7,Direction.EAST);
-        Truck truck4 = new Truck(14,4,Direction.NORTH);
+        final Truck truck1 = new Truck(3,2,Direction.SOUTH);
+        final Truck truck2 = new Truck(9,1,Direction.WEST);
+        final Truck truck3 = new Truck(11,7,Direction.EAST);
+        final Truck truck4 = new Truck(14,4,Direction.NORTH);
 
         assertEquals(DEATH_TIME, TEST_TRUCK.getDeathTime(), "The test truck should have a death time of 0.");
 
@@ -355,7 +418,7 @@ public class TruckTest {
     @Test
     public void testIsAlive() {
         setUp();
-        Truck othert = new Truck(1,1,Direction.NORTH);
+        final Truck othert = new Truck(1,1,Direction.NORTH);
         TEST_TRUCK.collide(othert);
         assertTrue(TEST_TRUCK.isAlive(), "These vehicles are both trucks so this truck vehicle should not die");
 
@@ -369,9 +432,13 @@ public class TruckTest {
     @Test
     public void testTruckToString(){
         setUp();
-        String teststring = TEST_TRUCK.toString();
+        final String teststring = TEST_TRUCK.getClass().getSimpleName().toLowerCase() + ", X position:"
+                + TEST_TRUCK.getX() + ", Y position:" + TEST_TRUCK.getY()
+                + ", Direction:" + TEST_TRUCK.getDirection()
+                + ", Status: " +  TEST_TRUCK.isAlive()
+                + ", Pokes: 0";
 
         assertEquals(teststring, TEST_TRUCK.toString(), "This string should return the class " +
-                "followed by position, direction, and status.");
+                "followed by position, direction, status, and pokes.");
     }
 }
